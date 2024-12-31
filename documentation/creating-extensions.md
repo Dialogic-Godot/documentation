@@ -19,16 +19,16 @@ An extension is a folder that contains all the information about these things so
 - layout presets
 - Dialogic nodes.
 
-## 📜 Content
+# 📜 Table of Contents
 [toc]
 
-## 1. Getting started
+# 1. Getting started
 
 The best way to create an extension is to use the extension creator in the dialogic settings (General).
 
 <img src="/media/extension_creator.png" width="600"/>
 
-By clicking the `Create New Extension` button, you can set up an extension folder and a custom event script. Enter a name for the new module and select what you would like to add. Then click `Create`.
+By clicking the `Create New Extension` button, you can set up an extension folder and a custom event script. Enter a name for the new module and select what you would like to add. Then click `Create`. This should create a folder inside your extensions folder with two scripts: `index.gd` and `event_(module name here).gd`.
 
 ```admonish warning
 Existing files will be overwritten!
@@ -36,9 +36,10 @@ Existing files will be overwritten!
 
 ---
 
-## 2. The essential part: `index.gd`
+# 2. The essential part: `index.gd`
 
 The central piece of any extension is the `index.gd` script. It is the only thing your extension is required to have. It has to extend `DialogicIndexer` and can overwrite that class's methods to let Dialogic know what things to add.
+
 For example, this code registers a custom event:
 
 ```gdscript
@@ -64,16 +65,16 @@ The Extension Creator allows you to get a basic event script. It has already set
 
 These are the things you need to do to make your event fully functional:
 
-#### 1. Event settings:
+### 3.1 Event settings/parameters/properties:
 
-All options for your event should be stored in variables. Define these at the top.
+All options for your event (i.e. parameters you can "pass" to your event) should be stored in variables. Define these at the top.
 
 ```gdscript
 var print_text: String = ""
 var in_game: bool = false
 ```
 
-#### 3.1 Execution code:
+### 3.2 Execution code:
 
 Add whatever should happen when your event is reached in the `_execute()` method:
 
@@ -89,7 +90,7 @@ func _execute() -> void:
 
 *The `finish()` method lets Dialogic know to continue with the next event.*
 
-#### 3.2 General settings:
+### 3.3 General settings:
 
 In the `_init()` method, you can set some base settings of your event:
 
@@ -100,7 +101,7 @@ func _init() -> void:
     event_category = "Godot"
 ```
 
-#### 3.3 Saving & Loading
+### 3.4 Saving & Loading (i.e. parsing, representation in timeline's text editor)
 
 We will cover working with shortcodes now. They are pretty much the text view of an event inside the timeline.
 The following is the shortcode for the Background event.
@@ -124,7 +125,7 @@ func get_shortcode_parameters() -> Dictionary:
 
 *The above event might be saved as `[print text="Some text to print" in_game="true"]`*
 
-### 3.34 My Variables are not changing
+#### 3.4.1 Troubleshooting
 
 If your variables are not changing despite setting values in your custom event in the timeline editor, here is a little checklist:
 
@@ -150,16 +151,17 @@ If your variables are not changing despite setting values in your custom event i
 
 After all of these values match, the visual and text modes will both change the variables in your event, and you can access them in the `_execute`.
 
+#### 3.4.2 Custom Saving & Loading Syntax
 
-## 4.1 Custom Saving & Loading Syntax
-
-You can implement custom saving syntax by overriding the function `to_text() -> String` and `from_text(timeline_event: String)`.
+You can also implement custom saving syntax by overriding the function `to_text() -> String` and `from_text(timeline_event: String)`.
 The `is_valid_event(event_name: String) -> bool` needs to be override too, if you want to quickly check if the event name is correct.
 
 When is custom saving and loading useful? If your shortcode has a special text syntax or is converting between values, map a word to an integer.
 This is what the text-, character-, choice-, condition-, and variable events do, so take a look at them if this is something you are interested in.
+A good example of this is the Comment event, which you can find under `addons/dialogic/modules/comment`.
 
-#### 5. Editor fields:
+
+### 3.5 Visual Editor fields:
 
 Your event is now fully functional, but in the visual editor, it is still blank. You will need to override the `build_event_editor()` method to define the fields/texts that will appear on the event.
 
@@ -173,9 +175,13 @@ func build_event_editor() -> void:
 
 If you would like to learn more about events, I strongly suggest looking at the built-in events.
 
+#### 3.5.1 Troubleshooting
+
+If your custom event does not show up in the visual editor, but functions when written in the text editor, considering restarting Godot for changes to take hold.
+
 ---
 
-# 5. Custom Subsystems
+# 4. Custom Subsystems
 
 ## What is a subsystem?
 
@@ -198,7 +204,7 @@ If you want to save persistent data, store it in the `Dialogic.current_state_inf
 
 ---
 
-# 6. Custom animations
+# 5. Custom animations
 
 ## What is an animation?
 
@@ -254,7 +260,7 @@ Importantly, the name of your animation file will determine if it is a Join, Lea
 
 ---
 
-# 7. Custom dialogic nodes
+# 6. Custom dialogic nodes
 
 ## What are dialogic nodes?
 
@@ -265,7 +271,7 @@ They are generally managed by a subsystem and are found because they are automat
 
 ---
 
-# 8. Custom Settings Pages
+# 7. Custom Settings Pages
 
 An extension might want to add a dialogic settings editor. This is just a UI scene that has a script inheriting `DialogicSettingsPage`.
 
